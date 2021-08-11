@@ -7,58 +7,139 @@
 * Memory Leak Test:
 *     valgrind --tool=memcheck --leak-check=full --show-leak-kinds=all ./tree.out
 */
+
+/*
+*
+* https://blog.csdn.net/u010558281/article/details/74276577
+*/
 #include<iostream>
 #include<stack>
 #include<queue>
-#include <memory>
 using namespace std;
-
 
 struct Node {
     int value;
     Node* left;
     Node* right;
-    Node(int _value):value(_value), left(), right(){}
+    Node():value(0){}
+    Node(int _value):value(_value), left(nullptr), right(nullptr){}
 };
 
 class BinaryTree {
-public:
+private:
     Node* m_rootNode;
-
+public:
+    BinaryTree(int val);
     ~BinaryTree(){};
-    // Binary Search Tree
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief  insert node from m_rootNode.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    void insertNodeFromRoot(int value);
     void insertNode(Node* node, int value);
+    void insertNodeNoIteration(int value);
 
+    void preOrderFromRoot();
     void preOrder(Node* node);
-    void preOrder_NoIteraton(Node* node);
+    void preOrderNoIteration(Node* node);
 
+    void inOrderFromRoot();
     void inOrder(Node* node);
-    void inOrder_NoIteraton(Node* node);
+    void inOrderNoIteration(Node* node);
 
+    void postOrderFromRoot();
     void postOrder(Node* node);
     
     // Traverse by level.
     // leetcode 102.
+    void levelOrderFromRoot();
     void levelOrder(Node* node);
 
-    void destroyTree(Node* rootNode);
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief  find target node by its value.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    Node* findTarget(int target);
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief  destroy the tree to avoid memory leak.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    void destroyTree();
+    void destroyNode(Node* rootNode);
+
+    int rightMin(Node* root);
+    int leftMax(Node* root);
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief  delete target node - leetcode 450.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    void  deleteTargetNode(int target);
+    Node* deleteNode(Node* root, int value);
 };
+
+BinaryTree::BinaryTree(int val)
+{
+    m_rootNode = new Node(val);
+}
+
+void BinaryTree::insertNodeFromRoot(int value)
+{
+    insertNode(m_rootNode, value);
+}
 
 void BinaryTree::insertNode(Node* node, int value)
 {
-    if(node->value >= value){
+    if(node->value >= value) {
         if(!node->left) {
             node->left = new Node(value);
+            cout << "new a node " << node->left << " " << value << endl;
         }else{
             insertNode(node->left, value);
         }
-    }else{
-        if(!node->right){
+    } else {
+        if(!node->right) {
             node->right = new Node(value);
-        }else{
+            cout << "new a node " << node->right << " " << value << endl;
+        } else {
             insertNode(node->right, value);
         }
     }
+}
+
+void BinaryTree::insertNodeNoIteration(int value)
+{
+    if(m_rootNode == nullptr) {
+        m_rootNode = new Node(value);
+        return;
+    }
+
+    Node* p = m_rootNode;
+    while(p != nullptr) {
+        if(value <= p->value) {
+            if(p->left == nullptr) {
+                p->left = new Node(value);
+                return;
+            }
+            p = p->left;
+        } else {
+            if(p->right == nullptr) {
+                p->right = new Node(value);
+                return;
+            }
+            p = p->right;
+        }
+    }
+}
+
+void BinaryTree::preOrderFromRoot()
+{
+    preOrder(m_rootNode);
 }
 
 void BinaryTree::preOrder(Node* node)
@@ -70,9 +151,9 @@ void BinaryTree::preOrder(Node* node)
     }
 }
 
-void BinaryTree::preOrder_NoIteraton(Node* node)
+void BinaryTree::preOrderNoIteration(Node* node)
 {
-    if(node == NULL){
+    if(node == nullptr){
         return;
     }
 
@@ -93,6 +174,11 @@ void BinaryTree::preOrder_NoIteraton(Node* node)
     }
 }
 
+void BinaryTree::inOrderFromRoot()
+{
+    inOrder(m_rootNode);   
+}
+
 void BinaryTree::inOrder(Node* node)
 {
     if(node){
@@ -102,7 +188,7 @@ void BinaryTree::inOrder(Node* node)
     }
 }
 
-void inOrder_NoIteraton(Node* node)
+void BinaryTree::inOrderNoIteration(Node* node)
 {
     stack<Node*> n_stack;
     Node* temp = node;
@@ -116,6 +202,11 @@ void BinaryTree::postOrder(Node* node)
         postOrder(node->right);
         cout << " " << node->value;
     }
+}
+
+void BinaryTree::levelOrderFromRoot()
+{
+    levelOrder(m_rootNode);
 }
 
 void BinaryTree::levelOrder(Node* node)
@@ -142,51 +233,114 @@ void BinaryTree::levelOrder(Node* node)
     }
 }
 
-// 1. 值传递问题；
-// 2. 内存泄露检测问题；
-void BinaryTree::destroyTree(Node* rootNode)
+Node* BinaryTree::findTarget(int target)
 {
-    cout << " destroyTree = " << rootNode << endl;
-     cout << " destroyTree = " << &rootNode << endl;
-    if(NULL != rootNode){
+    Node* pNode = m_rootNode;
+    while(pNode != nullptr) {
+        if(pNode->value > target) {
+            pNode = pNode->left;
+        } else if(pNode->value < target) {
+            pNode = pNode->right;
+        } else {
+            return pNode;
+        }
+    }
+    return nullptr;
+}
+
+//1.内存泄漏问题
+void BinaryTree::destroyTree()
+{
+    destroyNode(m_rootNode);
+}
+
+void BinaryTree::destroyNode(Node* rootNode)
+{
+    if(rootNode) {
+        cout << " destroyTree " << rootNode << " - " << rootNode->value << endl;
+    }
+
+    if(nullptr != rootNode){
         Node* left  = rootNode->left;
         Node* right = rootNode->right;
 
         delete rootNode;
-        rootNode = NULL;
 
-        destroyTree(left);
-        destroyTree(right);
+        destroyNode(left);
+        destroyNode(right);
     }
+}
+
+int BinaryTree::rightMin(Node* root)
+{
+    root = root->right;
+    while (root->left != nullptr)
+    {
+        root = root->left;
+    }
+    return root->value;
+}
+
+int BinaryTree::leftMax(Node* root)
+{
+    root = root->left;
+    while (root->right != nullptr)
+    {
+        root = root->right;
+    }
+    return root->value;
+}
+
+void BinaryTree::deleteTargetNode(int target)
+{
+    Node* tmp = deleteNode(m_rootNode, target);    
+    cout << " tmp = " << tmp << endl;
+}
+
+Node* BinaryTree::deleteNode(Node* root, int value)
+{
+    if (root == nullptr) return nullptr;
+
+    if (value > root->value)
+    {
+        root->right = deleteNode(root->right, value);
+    } else if (value < root->value) {
+        root->left = deleteNode(root->left, value);
+    } else {
+        // case 1: no children node
+        if (root->left == nullptr && root->right == nullptr) {
+            delete root;
+            root = nullptr;
+        // case 2: has right child node, replace value.
+        } else if (root->right != nullptr) {
+            root->value = rightMin(root);
+            root->right = deleteNode(root->right, root->value);
+        } else {
+            root->value = leftMax(root);
+            root->left  = deleteNode(root->left, root->value);
+        }
+    }
+    return root;
 }
 
 int main()
 {
-    BinaryTree testTree;
-    testTree.m_rootNode = new Node(20);
-    testTree.insertNode(testTree.m_rootNode, 10);
-    testTree.insertNode(testTree.m_rootNode, 8);
-    // testTree.insertNode(testTree.m_rootNode, 11);
-    // testTree.insertNode(testTree.m_rootNode, 30);
-    // testTree.insertNode(testTree.m_rootNode, 31);
-    // testTree.insertNode(testTree.m_rootNode, 29);
+    BinaryTree testTree(20);
+    testTree.insertNodeFromRoot(10);
+    testTree.insertNodeFromRoot(30);
+    testTree.insertNodeFromRoot(8);
+    testTree.insertNodeFromRoot(15);
 
-    cout << " value = " << testTree.m_rootNode->value << endl;
-    cout << " addr = " << testTree.m_rootNode << endl;
-    cout << " addr = " << &testTree.m_rootNode << endl;
+    std::cout<<" levelOrder is:" << endl;
+    testTree.levelOrderFromRoot();
+    std::cout<<" preOrder is:" << endl;
+    testTree.preOrderFromRoot();
 
-    // std::cout<<" levelOrder is:";
-    // testTree.levelOrder(testTree.m_rootNode);
-    // std::cout<<" preOrder is:";
-    // testTree.preOrder(testTree.m_rootNode);
+    testTree.deleteTargetNode(20);
+    cout << " after delete" << endl;
+    testTree.levelOrderFromRoot();
 
-    testTree.destroyTree(testTree.m_rootNode);
-    bool flag = testTree.m_rootNode == NULL;
-    cout << " falg = " << flag << endl;
-
-    //m_rootNode can not be read because memory has been free.
-    //cout << " addr = " << testTree.m_rootNode << endl;
-    //cout << " value = "<< testTree.m_rootNode->value << endl;
+    testTree.destroyTree();
 
     return 0;
 }
