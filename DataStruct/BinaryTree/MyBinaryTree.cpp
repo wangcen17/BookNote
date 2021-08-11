@@ -309,6 +309,7 @@ Node* BinaryTree::deleteNode(Node* root, int value)
     } else {
         // case 1: no children node
         if (root->left == nullptr && root->right == nullptr) {
+            // tips: do not forget to release memory here.
             delete root;
             root = nullptr;
         // case 2: has right child node, replace value.
