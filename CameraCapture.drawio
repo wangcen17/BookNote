@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-02-23T07:32:21.325Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36" etag="UVMwRzc7uBYYq3gNQk3Y" version="20.8.23" type="github">
+<mxfile host="app.diagrams.net" modified="2023-02-23T07:34:10.338Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36" etag="0CicWrZMAmqUExOHzQWr" version="20.8.23" type="github">
   <diagram name="Page-1" id="13e1069c-82ec-6db2-03f1-153e76fe0fe0">
     <mxGraphModel dx="2787" dy="981" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="none" math="0" shadow="0">
       <root>
@@ -9,14 +9,6 @@
         </mxCell>
         <mxCell id="7baba1c4bc27f4b0-10" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;align=center;" parent="7baba1c4bc27f4b0-2" vertex="1">
           <mxGeometry x="45" y="100" width="10" height="230" as="geometry" />
-        </mxCell>
-        <mxCell id="iy7BLxSKBUo0kFP7QP4m-23" value="cb:Event" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;labelBackgroundColor=none;fontFamily=Verdana;fontSize=12;edgeStyle=elbowEdgeStyle;elbow=vertical;exitX=0;exitY=0.358;exitDx=0;exitDy=0;exitPerimeter=0;" parent="7baba1c4bc27f4b0-2" source="7baba1c4bc27f4b0-13" edge="1">
-          <mxGeometry x="-0.4815" relative="1" as="geometry">
-            <mxPoint x="-95" y="190" as="targetPoint" />
-            <Array as="points" />
-            <mxPoint x="270" y="190" as="sourcePoint" />
-            <mxPoint as="offset" />
-          </mxGeometry>
         </mxCell>
         <mxCell id="7baba1c4bc27f4b0-3" value=":RecorderClient" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;rounded=1;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;align=center;" parent="1" vertex="1">
           <mxGeometry x="110" y="90" width="100" height="580" as="geometry" />
@@ -55,14 +47,6 @@
         </mxCell>
         <mxCell id="7baba1c4bc27f4b0-9" value="" style="html=1;points=[];perimeter=orthogonalPerimeter;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;align=center;" parent="7baba1c4bc27f4b0-8" vertex="1">
           <mxGeometry x="45" y="100" width="10" height="440" as="geometry" />
-        </mxCell>
-        <mxCell id="iy7BLxSKBUo0kFP7QP4m-17" value="cb:kCameraOpened" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;labelBackgroundColor=none;fontFamily=Verdana;fontSize=12;edgeStyle=elbowEdgeStyle;elbow=vertical;" parent="7baba1c4bc27f4b0-8" source="iy7BLxSKBUo0kFP7QP4m-8" edge="1">
-          <mxGeometry x="-0.4815" relative="1" as="geometry">
-            <mxPoint x="350" y="190" as="targetPoint" />
-            <Array as="points" />
-            <mxPoint x="1440" y="190" as="sourcePoint" />
-            <mxPoint as="offset" />
-          </mxGeometry>
         </mxCell>
         <mxCell id="7baba1c4bc27f4b0-17" value="CaptureImage" style="html=1;verticalAlign=bottom;endArrow=block;labelBackgroundColor=none;fontFamily=Verdana;fontSize=12;edgeStyle=elbowEdgeStyle;elbow=vertical;" parent="1" source="7baba1c4bc27f4b0-13" edge="1">
           <mxGeometry relative="1" as="geometry">
